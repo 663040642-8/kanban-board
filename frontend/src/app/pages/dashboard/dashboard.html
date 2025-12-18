@@ -1,0 +1,57 @@
+<div class="min-h-screen bg-[#f1f5f9] p-8 text-slate-800 font-sans">
+  
+  <header class="max-w-7xl mx-auto flex flex-col md:flex-row md:items-center justify-between mb-10 gap-4">
+    <div>
+      <nav class="text-[10px] font-bold text-indigo-600 uppercase tracking-[0.2em] mb-1">Overview</nav>
+      <h1 class="text-3xl font-black text-slate-900 tracking-tight">My Boards</h1>
+    </div>
+    
+    <button (click)="showModal.set(true)" 
+      class="flex items-center gap-2 bg-indigo-600 text-white px-6 py-3 rounded-2xl font-bold hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-200 active:scale-95">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" class="w-5 h-5">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+      </svg>
+      New Board
+    </button>
+  </header>
+
+  <div class="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+    @for (board of boards(); track board.id) {
+    <a [routerLink]="['/boards', board.id]" [queryParams]="{ name: board.name }"
+      class="group relative block bg-white p-8 rounded-4xl border border-slate-200 shadow-[0_2px_15px_-3px_rgba(0,0,0,0.04)] hover:shadow-xl hover:shadow-indigo-500/10 hover:border-indigo-400 transition-all duration-300 cursor-pointer overflow-hidden">
+      
+      <div class="absolute top-0 right-0 -mr-4 -mt-4 w-24 h-24 bg-indigo-50 rounded-full scale-0 group-hover:scale-100 transition-transform duration-500 ease-out opacity-50"></div>
+      
+      <div class="relative">
+        <h2 class="text-xl font-black text-slate-800 tracking-tight group-hover:text-indigo-600 transition-colors">{{ board.name }}</h2>
+        <p class="text-slate-400 text-sm mt-1 font-medium">Click to view board</p>
+      </div>
+    </a>
+    }
+  </div>
+
+  @if(showModal()) {
+  <div class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex justify-center items-center z-50 p-4 animate-in fade-in duration-200">
+    <div class="bg-white rounded-[2.5rem] shadow-2xl w-full max-w-md overflow-hidden p-10 border border-slate-100">
+      <div class="mb-8">
+        <h2 class="text-2xl font-black text-slate-900 tracking-tight mb-2">Create New Board</h2>
+        <p class="text-slate-500 text-sm">Organize your tasks and workflow efficiently.</p>
+      </div>
+
+      <input type="text" placeholder="Board name (e.g. Marketing Launch)" [(ngModel)]="newBoardName"
+        class="w-full border-2 border-slate-100 bg-slate-50 p-4 rounded-2xl mb-8 focus:bg-white focus:border-indigo-500 focus:outline-none transition-all" />
+      
+      <div class="flex gap-3">
+        <button (click)="showModal.set(false)" 
+          class="flex-1 py-4 bg-slate-100 text-slate-600 font-bold rounded-2xl hover:bg-slate-200 transition-all">
+          Cancel
+        </button>
+        <button (click)="createBoard()" 
+          class="flex-1 py-4 bg-indigo-600 text-white font-bold rounded-2xl hover:bg-indigo-700 shadow-lg shadow-indigo-100 transition-all">
+          Create Board
+        </button>
+      </div>
+    </div>
+  </div>
+  }
+</div>
